@@ -9,38 +9,68 @@ const ServiceForm = ({ handleTotalCost }) => {
   }, [numPages, numLanguages, handleTotalCost]);
 
   const handleNumPagesChange = (event) => {
-    const pages = parseInt(event.target.value,10);
-    setNumPages(pages);
-
-    
-  };
+  const input = event.target.value.replace(/\D/, ''); 
+  input = input === '' ? '1' : input;
+  setNumPages(input);
+};
 
   const handleNumLanguagesChange = (event) => {
-    const languages = parseInt(event.target.value,10);
-    setNumLanguages(languages);
+    const input = event.target.value.replace(/\D/, ''); 
+    input = input === '' ? '1' : input;
+    setNumLanguages(input);
+  };
+
+  const increasePages = () => {
+    setNumPages(numPages + 1);
+  };
+
+  const decreasePages = () => {
+    if (numPages > 1) {
+      setNumPages(numPages - 1);
+    }
+  };
+
+  const increaseLanguages = () => {
+    setNumLanguages(numLanguages + 1);
+  };
+
+  const decreaseLanguages = () => {
+    if (numLanguages > 1) {
+      setNumLanguages(numLanguages - 1);
+    }
   };
 
   return (
     <div className="web-service-form">
       <div>
-        <label htmlFor="numPages">Número de Páginas:</label>
+        <label htmlFor="numPages">Número de Páginas:  </label>
+        <button className="btn btn-circle btn-outline w-6 btn-xs btn-secondary " onClick={decreasePages}>-</button>
         <input
-          type="number"
+          type="text"
           id="numPages"
           value={numPages}
           onChange={handleNumPagesChange}
           min={1}
+          inputMode="none"
+          pattern="^\d*"
+          className=" input input-bordered input-xs w-16 px-2 mx-2 text-center font-bold "
         />
+        <button className="btn btn-circle btn-outline btn-xs btn-secondary" onClick={increasePages}>+</button>
       </div>
       <div>
-        <label htmlFor="numLanguages">Número de Idiomas:</label>
+        <label htmlFor="numLanguages">Número de Idiomas:  </label>
+        <button className="btn btn-circle btn-outline btn-xs btn-secondary" onClick={decreaseLanguages}>-</button>
         <input
-          type="number"
+          type="text"
           id="numLanguages"
           value={numLanguages}
           onChange={handleNumLanguagesChange}
           min={1}
+          inputMode="none"
+          pattern="^\d*"
+          className="input input-bordered input-xs w-16 px-2 mx-2 text-center font-bold"
         />
+        <button className="btn btn-circle btn-outline btn-xs btn-secondary" onClick={increaseLanguages}>+</button>
       </div>
     </div>
   );
