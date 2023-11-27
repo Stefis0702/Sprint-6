@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ServiceForm from "./ServiceForm";
 
+
 const MyForm = ({ services, handleServiceChange }) => {
   const initialServices = [
     {
@@ -40,7 +41,9 @@ const MyForm = ({ services, handleServiceChange }) => {
   );
 
   return (
+    
     <div className="bg-base-100">
+      
       <div className="container w-2/5 mx-auto">
         {initialServices.map((service, index) => (
           <div
