@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState} from "react";
 import ServiceForm from "./ServiceForm";
+import TodoList from "./TodoList";
+import Todo from "./Todo";
 
-
-const MyForm = ({ services, handleServiceChange }) => {
+const MyForm = ({ services, handleServiceChange, }) => {
   const initialServices = [
     {
       name: "Seo",
@@ -21,25 +22,35 @@ const MyForm = ({ services, handleServiceChange }) => {
     },
   ];
 
-  const [webServiceCost, setWebServiceCost] = useState(0);
+  const [webOptions, setWebOptions] = useState({pages: 1, languages: 1}); 
+ 
 
-  const handleTotalCost = (cost) => {
-    setWebServiceCost(cost);
+  const calculateTotalCost = () => {
+    let total = 0;
+  
+    initialServices.forEach(service => {
+      if (services[service.name]) {
+        total += service.cost;
+      }
+    });
+  
+    if (services.Web) { 
+      total += (webOptions.pages + webOptions.languages) * 30;
+    }
+  
+    return total;
   };
 
-  const totalBudget = initialServices.reduce(
-    (acc, service) => {
-      if (services[service.name]) {
-        if (service.name === "Web") {
-          return acc + (services.Web ? service.cost + webServiceCost : 0);
-        }
-        return acc + service.cost;
-      }
-      return acc;
-    },
-    0
-  );
-
+  const onPagesChange = (pages) => {
+    setWebOptions({...webOptions, pages});
+  };
+  const onLanguagesChange = (languages) => {
+    setWebOptions({...webOptions, languages});
+  };
+ 
+  
+ 
+  
   return (
     
     <div className="bg-base-100">
@@ -77,7 +88,7 @@ const MyForm = ({ services, handleServiceChange }) => {
                 <div className="flex justify-end mt-4">
                   <div className="card bordered-lg border-blue-500  text-accent-content">
                     <div className="card-body">
-                      <ServiceForm handleTotalCost={handleTotalCost} />
+                      <ServiceForm   webOptions={webOptions} handleTotalCost={calculateTotalCost()}  handleNumLanguagesChange={onLanguagesChange} handleNumPagesChange={onPagesChange}/>
                     </div>
                   </div>
                 </div>
@@ -87,10 +98,17 @@ const MyForm = ({ services, handleServiceChange }) => {
         ))}
         <div className="w-106  text-accent-content mb-5">
           <p className="text-right text-xl">
-            Preu pressuposat: {totalBudget} €
+            Preu pressuposat: {calculateTotalCost()} €
           </p>
         </div>
+        <div className="card bordered-lg border-blue-500 border-solid border-2 bg-blue-200 text-accent-content mb-4">
+      <div className="card-body">
+      <TodoList  setWebOptions={setWebOptions} arrayinitialServices={initialServices} services={services} totalCost={calculateTotalCost} webOptions={webOptions} handleNumPagesChange={onPagesChange} handleNumLanguagesChange={onLanguagesChange} />
       </div>
+      
+    </div>
+      </div>
+            
     </div>
   );
 };
